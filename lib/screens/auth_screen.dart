@@ -44,9 +44,8 @@ class _AuthScreenState extends State<AuthScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     
-    // Añade esta línea:
     _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) { // Opcional: solo cuando termine la animación
+      if (!_tabController.indexIsChanging) {
         setState(() {});
       }
     });
@@ -282,7 +281,7 @@ class _AuthScreenState extends State<AuthScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // — Obligatorios —
+        // Obligatorios
         _sectionLabel('Cuenta'),
         TextField(
           controller: _regUser,
@@ -309,7 +308,7 @@ class _AuthScreenState extends State<AuthScreen>
         ),
         const SizedBox(height: 24),
 
-        // — Personales —
+        // Personales
         _sectionLabel('Informació personal'),
         TextField(
           controller: _regName,
@@ -359,7 +358,6 @@ class _AuthScreenState extends State<AuthScreen>
         ),
         const SizedBox(height: 12),
 
-        // Género
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 18),
           decoration: BoxDecoration(
@@ -395,7 +393,6 @@ class _AuthScreenState extends State<AuthScreen>
         ),
         const SizedBox(height: 24),
 
-        // — Bio —
         _sectionLabel('Sobre ti'),
         TextField(
           controller: _regBio,
