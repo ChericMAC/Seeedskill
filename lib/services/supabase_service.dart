@@ -1,17 +1,9 @@
-// ============================================================
-//  supabase_service.dart — Sin Supabase Auth, login simple
-//  Los usuarios se guardan en public.profiles con password
-// ============================================================
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final _db = Supabase.instance.client;
-
-// ============================================================
-// MODELOS
-// ============================================================
 
 class UserProfile {
   final String id;
@@ -116,10 +108,6 @@ class MatchWithProfile {
   });
 }
 
-// ============================================================
-// SESIÓN LOCAL — guarda el ID del usuario en SharedPreferences
-// ============================================================
-
 class SessionManager {
   static const _key = 'current_user_id';
   static String? _cachedId;
@@ -146,14 +134,8 @@ class SessionManager {
   static String? get currentId => _cachedId;
 }
 
-// ============================================================
-// AUTH SERVICE — sin Supabase Auth, todo en public.profiles
-// ============================================================
-
 class AuthService {
-  // ----------------------------------------------------------
-  // Registrar usuario nuevo (guarda password como texto)
-  // ----------------------------------------------------------
+  // Registrar usuario nuevo
   static Future<UserProfile> signUp({
     required String username,
     required String password,
@@ -164,7 +146,7 @@ class AuthService {
     DateTime? birthDate,
     String? gender,
   }) async {
-    // Comprobar si el username ya existe
+    // Comprobar si existe
     final existing = await _db
         .from('profiles')
         .select('id')
@@ -175,10 +157,10 @@ class AuthService {
       throw Exception('El nom de usuari ja està en us.');
     }
 
-    // Insertar nuevo perfil
+    // Insertar perfil
     final data = await _db.from('profiles').insert({
       'username': username.trim(),
-      'password': password,           // texto plano para demo
+      'password': password,          
       if (fullName != null && fullName.isNotEmpty) 'full_name': fullName.trim(),
       'is_active': true,
       'email': email?.trim(),
@@ -193,9 +175,7 @@ class AuthService {
     return profile;
   }
 
-  // ----------------------------------------------------------
-  // Login — busca por username y comprueba password
-  // ----------------------------------------------------------
+  // Login
   static Future<UserProfile> signIn({
     required String username,
     required String password,
@@ -219,30 +199,20 @@ class AuthService {
     return profile;
   }
 
-  // ----------------------------------------------------------
   // Cerrar sesión
-  // ----------------------------------------------------------
   static Future<void> signOut() async {
     await SessionManager.clear();
   }
 
-  // ----------------------------------------------------------
-  // ID del usuario actual (sincrónico, tras cargar sesión)
-  // ----------------------------------------------------------
+  // ID usuario
   static String? get currentUserId => SessionManager.currentId;
 
-  // ----------------------------------------------------------
-  // Cargar sesión guardada al iniciar la app
-  // ----------------------------------------------------------
+  // Cargar sesión
   static Future<bool> restoreSession() async {
     final id = await SessionManager.load();
     return id != null;
   }
 }
-
-// ============================================================
-// PROFILE SERVICE
-// ============================================================
 
 class ProfileService {
   static Future<UserProfile> getProfile(String userId) async {
@@ -299,10 +269,6 @@ class ProfileService {
   }
 }
 
-// ============================================================
-// DISCOVERY SERVICE
-// ============================================================
-
 class DiscoveryService {
   static Future<List<UserProfile>> getDiscoverableUsers({
     int limit = 20,
@@ -321,8 +287,6 @@ class DiscoveryService {
 
     final excludeIds = [uid, ...swipedIds];
 
-    // Supabase no soporta "not in array" directamente con lista dinámica
-    // así que filtramos en cliente si la lista es pequeña
     final data = await _db
         .from('profiles')
         .select()
@@ -361,16 +325,11 @@ class DiscoveryService {
   }
 }
 
-// ============================================================
-// MATCH SERVICE
-// ============================================================
-
 class MatchService {
   static Future<List<MatchWithProfile>> getMatches() async {
   final uid = AuthService.currentUserId;
   if (uid == null) throw Exception('No hay sesión activa.');
 
-  // 1. Traer matches
   final matchData = await _db
       .from('matches')
       .select()
@@ -383,18 +342,16 @@ class MatchService {
     final otherUserId =
         match['user1_id'] == uid ? match['user2_id'] : match['user1_id'];
 
-    // 2. Buscar conversación por match_id (sin join)
     final convoData = await _db
         .from('conversations')
         .select()
         .eq('match_id', match['id'])
         .maybeSingle();
 
-    if (convoData == null) continue; // no hay conversación aún
+    if (convoData == null) continue;
 
     final conversationId = convoData['id'] as String;
 
-    // 3. Perfil del otro usuario
     final profileData = await _db
         .from('profiles')
         .select()
@@ -403,7 +360,6 @@ class MatchService {
 
     if (profileData == null) continue;
 
-    // 4. Último mensaje
     final lastMsgData = await _db
         .from('messages')
         .select()
@@ -426,10 +382,6 @@ class MatchService {
   return result;
 }
 }
-
-// ============================================================
-// CHAT SERVICE
-// ============================================================
 
 class ChatService {
   static Future<List<ChatMessage>> getMessages(
