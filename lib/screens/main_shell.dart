@@ -1,6 +1,3 @@
-// ============================================================
-//  main_shell.dart — Shell principal con navegación inferior
-// ============================================================
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'discover_screen.dart';
