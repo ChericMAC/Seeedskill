@@ -1,6 +1,3 @@
-// ============================================================
-//  chat_screen.dart — Chat individual con realtime
-// ============================================================
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
@@ -232,7 +229,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-// ── Burbuja de mensaje ────────────────────────────────────────
 class _MessageBubble extends StatelessWidget {
   final ChatMessage message;
   final bool isMe;
@@ -304,7 +300,6 @@ class _MessageBubble extends StatelessWidget {
   }
 }
 
-// ── Separador de fecha ────────────────────────────────────────
 class _DateDivider extends StatelessWidget {
   final DateTime dt;
   const _DateDivider({required this.dt});
@@ -341,7 +336,6 @@ class _DateDivider extends StatelessWidget {
   }
 }
 
-// ── Avatar pequeño ────────────────────────────────────────────
 class _SmallAvatar extends StatelessWidget {
   final UserProfile user;
   final double size;
