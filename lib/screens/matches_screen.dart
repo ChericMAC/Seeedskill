@@ -1,6 +1,3 @@
-// ============================================================
-//  matches_screen.dart — Lista de matches con último mensaje
-// ============================================================
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/supabase_service.dart';
