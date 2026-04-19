@@ -1,6 +1,3 @@
-// ============================================================
-//  discover_screen.dart — Stack de swipe tipo Tinder
-// ============================================================
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/supabase_service.dart';
@@ -202,7 +199,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Carta de fondo (siguiente)
+                // Carta de fondo
                 if (_profiles.length > 1)
                   Positioned.fill(
                     top: 16,
@@ -212,7 +209,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     ),
                   ),
 
-                // Carta principal (draggable)
+                // Carta principal
                 Positioned.fill(
                   child: GestureDetector(
                     onPanUpdate: (d) {
@@ -240,7 +237,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         child: Stack(
                           children: [
                             _ProfileCard(profile: _profiles.first),
-                            // Indicador LIKE
                             if (_dragOffset.dx > 20)
                               Positioned(
                                 top: 40, left: 24,
@@ -250,7 +246,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                   opacity: (_dragOffset.dx / 120).clamp(0, 1),
                                 ),
                               ),
-                            // Indicador NOPE
                             if (_dragOffset.dx < -20)
                               Positioned(
                                 top: 40, right: 24,
@@ -271,7 +266,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           ),
         ),
 
-        // Botones de acción
+        // Botones
         Padding(
           padding: const EdgeInsets.only(bottom: 28, top: 12),
           child: Row(
@@ -298,7 +293,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 }
 
-// ── Tarjeta de perfil ─────────────────────────────────────────
 class _ProfileCard extends StatelessWidget {
   final UserProfile profile;
   final double scale;
@@ -325,7 +319,7 @@ class _ProfileCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // Foto / Avatar
+            // Foto
             profile.avatarUrl != null && profile.avatarUrl!.isNotEmpty
                 ? Image.network(
                     profile.avatarUrl!,
@@ -446,7 +440,6 @@ class _ProfileCard extends StatelessWidget {
   }
 }
 
-// ── Etiqueta de swipe ─────────────────────────────────────────
 class _SwipeLabel extends StatelessWidget {
   final String label;
   final Color color;
@@ -482,7 +475,6 @@ class _SwipeLabel extends StatelessWidget {
   }
 }
 
-// ── Botón de acción circular ──────────────────────────────────
 class _ActionButton extends StatelessWidget {
   final IconData icon;
   final Color color;
