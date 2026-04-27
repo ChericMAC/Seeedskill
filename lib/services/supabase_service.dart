@@ -166,7 +166,7 @@ class AuthService {
       'email': email?.trim(),
       'bio': bio?.trim(),
       'location': location?.trim(),
-      'birth_date': birthDate,
+      'birth_date': birthDate.toIso8601String(),
       'gender': gender?.trim()
     }).select().single();
 
