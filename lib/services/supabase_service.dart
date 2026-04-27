@@ -250,7 +250,7 @@ class ProfileService {
       if (bio != null) 'bio': bio,
       if (avatarUrl != null) 'avatar_url': avatarUrl,
       if (birthDate != null)
-        'birth_date': birthDate.toIso8601String().substring(0, 10),
+        'birth_date': birthDate?.toIso8601String(),
       if (gender != null) 'gender': gender,
       if (interestedIn != null) 'interested_in': interestedIn,
       if (location != null) 'location': location,
