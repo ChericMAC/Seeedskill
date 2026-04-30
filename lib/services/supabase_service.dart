@@ -421,7 +421,11 @@ class ChatService {
         .stream(primaryKey: ['id'])
         .eq('conversation_id', conversationId)
         .order('created_at')
-        .map((rows) => rows.map((e) => ChatMessage.fromMap(e)).toList());
+        .map((rows) {
+        final list = rows.map((e) => ChatMessage.fromMap(e)).toList();
+        list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        return list;
+      });
   }
 
   static Future<void> markAsRead(String conversationId) async {
